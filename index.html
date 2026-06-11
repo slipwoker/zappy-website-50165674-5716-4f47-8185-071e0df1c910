@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Ignite Your Story &amp; Sound — T-N-T Publishing Company</title>
+    <meta name="description" content="Where books meet beats. T-N-T Publishing Company amplifies authors and musicians with expert atv music publishing and kindle book publishing services. Start your creative explosion today.">
+    <meta name="keywords" content="atv music publishing, kindle book publishing, book and music publishing, creative publishing house, story and sound">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: '50165674-5716-4f47-8185-071e0df1c910',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="Ignite Your Story &amp; Sound — T-N-T Publishing Company">
+    <meta property="og:description" content="Where books meet beats. T-N-T Publishing Company amplifies authors and musicians with expert atv music publishing and kindle book publishing services. Start your creative explosion today.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ignite Your Story &amp; Sound — T-N-T Publishing Company">
+    <meta name="twitter:description" content="Where books meet beats. T-N-T Publishing Company amplifies authors and musicians with expert atv music publishing and kindle book publishing services. Start your creative explosion today.">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .skip-link { position: absolute; top: 0; left: 0; transform: translateY(-200%); padding: 12px 18px; background: var(--bg-dark, #1a1a1a); color: var(--text-light, #fff); font-weight: 600; border-radius: 0 0 8px 0; z-index: 10000; }
+    .skip-link:focus { transform: none; outline: 2px solid var(--ring, #fff); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 3px; }
+  </style>
+
+
+  
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <script>window.ZAPPY_WEBSITE_ID = "50165674-5716-4f47-8185-071e0df1c910"; window.ZAPPY_API_BASE = "https://api.zappy5.com";</script>
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-light) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-light) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-light) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="navbar">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+  
+  <button class="phone-header-btn" data-phone="[business_phone]" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link"><img class="logo" src="/assets/site-home-image-1.webp" alt="T-N-T Publishing Company"></a>
+    </div>
+    
+    <ul class="nav-menu" id="navMenu"><li><a href="/">Home</a></li><li><a href="/services">Services</a></li><li><a href="/about">About</a></li></ul>
+    
+    <div class="nav-cta-container">
+      <a href="/contact" class="nav-cta-btn">Contact</a>
+    </div>
+  </div>
+</nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .navbar,
+          nav.navbar {
+            min-height: 70px !important;
+          }
+
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            margin-top: auto !important;
+            margin-bottom: auto !important;
+            transform: none !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+          }
+
+          html[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          body[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] header .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] nav .phone-header-btn {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '0', 'important');
+          mobileToggle.style.setProperty('bottom', '0', 'important');
+          mobileToggle.style.setProperty('margin-top', 'auto', 'important');
+          mobileToggle.style.setProperty('margin-bottom', 'auto', 'important');
+          mobileToggle.style.setProperty('transform', 'none', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '0', 'important');
+          phoneBtn.style.setProperty('bottom', '0', 'important');
+          phoneBtn.style.setProperty('margin-top', 'auto', 'important');
+          phoneBtn.style.setProperty('margin-bottom', 'auto', 'important');
+          phoneBtn.style.setProperty('transform', 'none', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu handler (shared by click and touchend)
+    function handleToggle(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+      const closeIcon = newToggle.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    }
+    
+    // Use click for desktop/emulation and touchend as iOS Safari fallback.
+    // Prevent double-fire with a timestamp guard.
+    var lastToggleTime = 0;
+    function guardedToggle(e) {
+      var now = Date.now();
+      if (now - lastToggleTime < 300) return;
+      lastToggleTime = now;
+      handleToggle(e);
+    }
+    
+    newToggle.addEventListener('click', guardedToggle);
+    newToggle.addEventListener('touchend', guardedToggle);
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '[business_phone]';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp button visibility is now controlled via CSS (siteSettings).
+    // No JS-based desktop hiding — the button is visible on both mobile and desktop by default.
+  });
+})();
+
+</script>
+  
+  <main id="main">
+    <section data-band-index="0" class="home-hero-section" data-layout-spec="Home-hero" data-hero-type="fullscreen-scrim">
+  <!-- Full-bleed background image -->
+  <div class="home-hero-section__bg-layer">
+    <img loading="eager" fetchpriority="high" data-hero-bg="true" data-placeholder="home-hero-image-1" data-context="A cinematic editorial scene blending open book pages with vinyl record sleeve textures under warm studio lighting. Deep plum and indigo shadows with parchment highlights, paper grain visible, no separate cutout objects, cohesive atmospheric composition for a publishing company." width="1200" height="600" src="/assets/site-home-hero-image-1.webp" alt="Atmospheric editorial scene blending literature and music textures" class="home-hero-section__bg-img">
+  </div>
+
+  <!-- Scrim overlay for text legibility -->
+  <div class="home-hero-section__scrim" aria-hidden="true"></div>
+
+  <!-- Decorative waveform motif -->
+  <div class="home-hero-section__waveform" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 600 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L10,60 L15,30 L20,60 L25,45 L30,60 L35,20 L40,60 L45,50 L50,60 L55,35 L60,60 L65,25 L70,60 L75,55 L80,60 L85,10 L90,60 L95,40 L100,60 L105,48 L110,60 L115,22 L120,60 L125,38 L130,60 L135,52 L140,60 L145,18 L150,60 L155,42 L160,60 L165,28 L170,60 L175,44 L180,60 L185,15 L190,60 L195,50 L200,60 L205,32 L210,60 L215,46 L220,60 L225,20 L230,60 L235,36 L240,60 L245,55 L250,60 L255,12 L260,60 L265,48 L270,60 L275,24 L280,60 L285,40 L290,60 L295,52 L300,60 L305,16 L310,60 L315,44 L320,60 L325,30 L330,60 L335,38 L340,60 L345,50 L350,60 L355,22 L360,60 L365,34 L370,60 L375,46 L380,60 L385,18 L390,60 L395,42 L400,60 L405,26 L410,60 L415,54 L420,60 L425,14 L430,60 L435,48 L440,60 L445,20 L450,60 L455,36 L460,60 L465,50 L470,60 L475,28 L480,60 L485,44 L490,60 L495,16 L500,60 L505,40 L510,60 L515,52 L520,60 L525,24 L530,60 L535,38 L540,60 L545,46 L550,60 L555,18 L560,60 L565,32 L570,60 L575,48 L580,60 L585,22 L590,60 L595,34 L600,60" stroke="var(--accent)" stroke-width="1.5" fill="none" opacity="0.35"></path>
+    </svg>
+  </div>
+
+  <!-- Text overlay group in lower START quadrant -->
+  <div class="home-hero-section__content">
+    <h1 class="home-hero-section__headline">Where Stories Meet Sound</h1>
+    <h3 class="home-hero-section__subtitle">A publishing house for authors and musicians — bridging the literary and musical worlds with editorial craft and sonic vision.</h3>
+    <div class="home-hero-section__ctas">
+      <a href="/contact" class="home-hero-section__btn home-hero-section__btn--primary">Start Your Project</a>
+      <a href="/services" class="home-hero-section__btn home-hero-section__btn--secondary">Explore Publishing Support</a>
+    </div>
+  </div>
+
+  <!-- Bottom divider: gradient fade + torn-paper contour with waveform traces -->
+  <div class="home-hero-section__divider-wrapper" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heroFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--bg-dark)" stop-opacity="0"></stop>
+          <stop offset="100%" stop-color="var(--bg-dark)" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="1200" height="100" fill="url(#heroFade)"></rect>
+      <path d="M0,100 L0,55 Q30,48 60,58 T120,52 Q150,60 180,48 T240,56 Q270,50 300,60 T360,52 Q390,58 420,48 T480,55 Q510,50 540,60 T600,52 Q630,58 660,48 T720,55 Q750,50 780,60 T840,52 Q870,58 900,48 T960,55 Q990,50 1020,60 T1080,52 Q1110,58 1140,48 T1200,55 L1200,100 Z" fill="var(--bg-light)" opacity="0.85"></path>
+      <path d="M0,100 L0,65 Q40,58 80,68 T160,62 Q200,70 240,58 T320,66 Q360,60 400,70 T480,62 Q520,68 560,58 T640,65 Q680,60 720,70 T800,62 Q840,68 880,58 T960,65 Q1000,60 1040,70 T1120,62 Q1160,68 1200,58 L1200,100 Z" fill="var(--bg-light)" opacity="0.5"></path>
+      <path d="M0,100 L0,75 Q25,68 50,78 T100,72 Q125,80 150,68 T200,76 Q225,70 250,80 T300,72 Q325,78 350,68 T400,75 Q425,70 450,80 T500,72 Q525,78 550,68 T600,75 Q625,70 650,80 T700,72 Q725,78 750,68 T800,75 Q825,70 850,80 T900,72 Q925,78 950,68 T1000,75 Q1025,70 1050,80 T1100,72 Q1125,78 1150,68 T1200,75 L1200,100 Z" fill="var(--bg-light)" opacity="0.25"></path>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="1" class="home-services-section" data-layout-spec="Home-services">
+  <div class="home-services-section__inner">
+    <!-- Text Column -->
+    <div class="home-services-section__text">
+      <h2 class="home-services-section__heading">Where Story Meets Sound</h2>
+      <p class="home-services-section__intro">T-N-T Publishing bridges the literary and musical worlds, offering a unified home for creators who refuse to be confined to a single medium. From manuscript to master recording, we shepherd your work with editorial precision and strategic vision.</p>
+      
+      <div class="home-services-section__services">
+        <!-- Service 1 -->
+        <div class="home-services-section__service">
+          <div class="home-services-section__service-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6H20M4 12H20M4 18H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <div class="home-services-section__service-content">
+            <h3 class="home-services-section__service-title">Book Publishing</h3>
+            <p class="home-services-section__service-desc">Comprehensive editorial development, copy editing, and proofreading that refines your manuscript. We handle cover design, interior layout, and distribution strategy to position your book for kindle book publishing and print audiences alike.</p>
+          </div>
+        </div>
+        <!-- Service 2 -->
+        <div class="home-services-section__service">
+          <div class="home-services-section__service-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18V5L21 3V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+              <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+            </svg>
+          </div>
+          <div class="home-services-section__service-content">
+            <h3 class="home-services-section__service-title">ATV Music Publishing</h3>
+            <p class="home-services-section__service-desc">Production guidance, mixing oversight, and sonic branding for recording artists. Our atv music publishing support extends to concordia music publishing standards, helping you navigate rights, licensing, and audience-facing presentation.</p>
+          </div>
+        </div>
+        <!-- Service 3 -->
+        <div class="home-services-section__service">
+          <div class="home-services-section__service-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="home-services-section__service-content">
+            <h3 class="home-services-section__service-title">Cross-Disciplinary Brand Development</h3>
+            <p class="home-services-section__service-desc">For creators who work across books and music, we build a cohesive brand identity that unifies your literary voice with your sonic signature. Think of it as ascap music publishing meets author platform strategy—one team, one vision.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Imagery Column - Asymmetrical Editorial Tile Grid -->
+    <div class="home-services-section__imagery">
+      <div class="home-services-section__tile-grid">
+        <!-- Tile 1: Book Cover -->
+        <div class="home-services-section__tile home-services-section__tile--book">
+          <img loading="lazy" decoding="async" data-placeholder="home-services-image-1" data-context="A moody, close-up editorial photograph of a textured hardcover book spine with gold foil stamping, sitting on a dark wooden surface with soft directional light, suggesting literary craftsmanship." width="400" height="500" src="/assets/site-home-services-image-1.webp" alt="Textured book cover suggesting literary craftsmanship">
+        </div>
+        <!-- Tile 2: Notation Page -->
+        <div class="home-services-section__tile home-services-section__tile--notation">
+          <img loading="lazy" decoding="async" data-placeholder="home-services-image-2" data-context="A close-up macro shot of a sheet music page with handwritten musical notation, slightly curled at the edge, with warm cream paper texture and faint ink bleed, evoking the tactile world of music publishing." width="400" height="300" src="/assets/site-home-services-image-2.webp" alt="Handwritten musical notation on aged paper">
+        </div>
+        <!-- Tile 3: Studio Texture -->
+        <div class="home-services-section__tile home-services-section__tile--studio">
+          <img loading="lazy" decoding="async" data-placeholder="home-services-image-3" data-context="An abstract top-down photograph of vintage studio equipment knobs and VU meter needles against a dark charcoal background, with shallow depth of field and subtle waveform reflections, representing the technical side of music production." width="400" height="300" src="/assets/site-home-services-image-3.webp" alt="Vintage studio equipment texture">
+        </div>
+        <!-- Parchment Backplate (peeking from bottom-right corner) -->
+        <div class="home-services-section__parchment-backplate" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Divider: Diagonal clip-path band -->
+  <div class="home-services-section__divider-wrapper" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="home-services-divider-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#1F1630"></stop>
+          <stop offset="100%" stop-color="#2B163D"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,80 L0,30 L1200,80 L1200,80 Z" fill="var(--bg-dark)"></path>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="2" class="home-showcase-section" data-layout-spec="Home-showcase">
+  <div class="home-showcase-section__bg-decor" aria-hidden="true"></div>
+  <div class="home-showcase-section__container">
+    <header class="home-showcase-section__intro">
+      <h2 class="home-showcase-section__heading">Where Story Meets Sound</h2>
+      <p class="home-showcase-section__subtitle">We publish across the literary and musical spectrum, bringing novels, poetry, artist projects, and soundtrack releases to audiences who crave depth and craft.</p>
+    </header>
+    <div class="home-showcase-section__grid">
+      <article class="home-showcase-section__tile home-showcase-section__tile--novels">
+        <div class="home-showcase-section__tile-img">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-1" data-context="A dimly lit editorial photograph of a hardcover novel lying open on a dark wooden table, with soft mint-colored light grazing the page edges and a subtle halftone texture overlay on the cover." width="600" height="400" src="/assets/site-home-showcase-image-1.webp" alt="Open novel with atmospheric lighting">
+        </div>
+        <div class="home-showcase-section__tile-content">
+          <h3 class="home-showcase-section__tile-title">Novels &amp; Prose</h3>
+          <p class="home-showcase-section__tile-desc">Full-service editorial development, design, and distribution for fiction and narrative non-fiction that demands to be read.</p>
+        </div>
+      </article>
+      <article class="home-showcase-section__tile home-showcase-section__tile--poetry">
+        <div class="home-showcase-section__tile-img">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-2" data-context="A close-up crop of a poetry manuscript page with handwritten annotations in the margin, illuminated by warm indigo-plum light and a faint waveform texture in the background." width="600" height="400" src="/assets/site-home-showcase-image-2.webp" alt="Poetry manuscript with handwritten notes">
+        </div>
+        <div class="home-showcase-section__tile-content">
+          <h3 class="home-showcase-section__tile-title">Poetry Collections</h3>
+          <p class="home-showcase-section__tile-desc">From chapbooks to full-length collections, we shape verse into beautifully crafted editions that honor every line.</p>
+        </div>
+      </article>
+      <article class="home-showcase-section__tile home-showcase-section__tile--artists">
+        <div class="home-showcase-section__tile-img">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-3" data-context="A stylized portrait of a musician in a recording studio, seen through a grainy halftone filter, with sheet music fragments and mint-colored waveform bars overlaid on the image." width="600" height="400" src="/assets/site-home-showcase-image-3.webp" alt="Musician portrait with waveform overlay">
+        </div>
+        <div class="home-showcase-section__tile-content">
+          <h3 class="home-showcase-section__tile-title">Artist Projects</h3>
+          <p class="home-showcase-section__tile-desc">Bespoke packaging and publishing for musicians and multidisciplinary artists who want their work to live beyond the stream.</p>
+        </div>
+      </article>
+      <article class="home-showcase-section__tile home-showcase-section__tile--soundtracks">
+        <div class="home-showcase-section__tile-img">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-4" data-context="A dark, cinematic still of a vinyl record being pressed, with a torn paper texture revealing a pale cream underside along the bottom edge and subtle mint highlights." width="600" height="400" src="/assets/site-home-showcase-image-4.webp" alt="Vinyl record pressing with torn paper edge">
+        </div>
+        <div class="home-showcase-section__tile-content">
+          <h3 class="home-showcase-section__tile-title">Soundtrack &amp; Recording Releases</h3>
+          <p class="home-showcase-section__tile-desc">We produce and publish original scores, soundtrack albums, and recording projects with the same editorial rigor we bring to books.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="home-showcase-section__divider-wrapper" data-no-icon-edit="true" aria-hidden="true">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,80 L0,45 Q35,38 70,40 T140,42 Q175,35 210,38 T280,40 Q315,42 350,35 T420,40 Q455,38 490,42 T560,35 Q595,40 630,38 T700,42 Q735,35 770,40 T840,38 Q875,42 910,35 T980,40 Q1015,38 1050,42 T1120,35 Q1155,40 1190,38 T1200,42 L1200,80 Z" fill="var(--bg-light)"></path>
+      <path d="M0,80 L0,48 Q35,41 70,43 T140,45 Q175,38 210,41 T280,43 Q315,45 350,38 T420,43 Q455,41 490,45 T560,38 Q595,43 630,41 T700,45 Q735,38 770,43 T840,41 Q875,45 910,38 T980,43 Q1015,41 1050,45 T1120,38 Q1155,43 1190,41 T1200,45 L1200,80 Z" fill="var(--bg-light)" opacity="0.6"></path>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="3" class="home-testimonials-section" data-layout-spec="Home-testimonials">
+    <div class="home-testimonials-section__container">
+        <div class="home-testimonials-section__intro">
+            <h2 class="home-testimonials-section__title">Voices Across the Page &amp; the Studio</h2>
+            <p class="home-testimonials-section__subtitle">We believe the best work comes from thoughtful collaboration. Here's what our authors, musicians, and creative partners have to say about bringing their stories and sounds to life with T-N-T Publishing.</p>
+        </div>
+        
+        <div class="home-testimonials-section__grid">
+            <!-- Oversized Pull Quote Panel -->
+            <article class="home-testimonials-section__card home-testimonials-section__card--featured">
+                <div class="home-testimonials-section__card-inner">
+                    <div class="home-testimonials-section__card-accent"></div>
+                    <blockquote class="home-testimonials-section__quote">
+                        <svg class="home-testimonials-section__quote-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-type="icon" data-icon-type="svg" aria-hidden="true">
+                            <path d="M3 21C6 21 8 18 8 14V7H3V12H6C6 14.5 4.5 16 3 16V21ZM13 21C16 21 18 18 18 14V7H13V12H16C16 14.5 14.5 16 13 16V21Z" fill="currentColor"></path>
+                        </svg>
+                        <p class="home-testimonials-section__quote-text">T-N-T Publishing didn't just print my novel—they understood its rhythm. The editorial team treated every chapter like a movement in a symphony, and the final product feels like a true cultural artifact. They bridge the literary and musical worlds with an authenticity I haven't found anywhere else.</p>
+                    </blockquote>
+                    <footer class="home-testimonials-section__attribution">
+                        <div class="home-testimonials-section__author-img-wrapper">
+                            <img loading="lazy" decoding="async" data-placeholder="author-elara-vance" data-context="Professional headshot of author Elara Vance, a woman in her 40s with dark curly hair, wearing a dark blazer, looking thoughtfully at the camera against a warm parchment-toned background" width="48" height="48" src="/assets/site-author-elara-vance.webp" alt="Elara Vance" class="home-testimonials-section__author-img">
+                        </div>
+                        <div class="home-testimonials-section__author-info">
+                            <span class="home-testimonials-section__author-name">Elara Vance</span>
+                            <span class="home-testimonials-section__author-role">Author, <em>The Glass Aria</em></span>
+                        </div>
+                    </footer>
+                </div>
+            </article>
+
+            <!-- Companion Panel 1 -->
+            <article class="home-testimonials-section__card">
+                <div class="home-testimonials-section__card-inner">
+                    <div class="home-testimonials-section__card-accent"></div>
+                    <blockquote class="home-testimonials-section__quote">
+                        <p class="home-testimonials-section__quote-text">Working with T-N-T on my album's companion book was a revelation. They captured the essence of each track visually and editorially. It's rare to find a team that respects both the silence between notes and the weight of words.</p>
+                    </blockquote>
+                    <footer class="home-testimonials-section__attribution">
+                        <div class="home-testimonials-section__author-img-wrapper">
+                            <img loading="lazy" decoding="async" data-placeholder="musician-marcus-choi" data-context="Candid portrait of recording artist Marcus Choi, a man in his 30s with short black hair and a beard, wearing a denim jacket, standing near studio equipment with warm ambient lighting" width="48" height="48" src="/assets/site-musician-marcus-choi.webp" alt="Marcus Choi" class="home-testimonials-section__author-img">
+                        </div>
+                        <div class="home-testimonials-section__author-info">
+                            <span class="home-testimonials-section__author-name">Marcus Choi</span>
+                            <span class="home-testimonials-section__author-role">Recording Artist</span>
+                        </div>
+                    </footer>
+                </div>
+            </article>
+
+            <!-- Companion Panel 2 -->
+            <article class="home-testimonials-section__card">
+                <div class="home-testimonials-section__card-inner">
+                    <div class="home-testimonials-section__card-accent"></div>
+                    <blockquote class="home-testimonials-section__quote">
+                        <p class="home-testimonials-section__quote-text">As an agent, I need partners who elevate my clients' work without ego. T-N-T's dual expertise in publishing and music makes them an indispensable creative studio. Their cultural credibility and polished presentation consistently exceed expectations.</p>
+                    </blockquote>
+                    <footer class="home-testimonials-section__attribution">
+                        <div class="home-testimonials-section__author-img-wrapper">
+                            <img loading="lazy" decoding="async" data-placeholder="agent-samira-owusu" data-context="Professional portrait of literary and music agent Samira Owusu, a woman in her 50s with short silver hair, wearing stylish glasses and a cream blouse, smiling warmly" width="48" height="48" src="/assets/site-agent-samira-owusu.webp" alt="Samira Owusu" class="home-testimonials-section__author-img">
+                        </div>
+                        <div class="home-testimonials-section__author-info">
+                            <span class="home-testimonials-section__author-name">Samira Owusu</span>
+                            <span class="home-testimonials-section__author-role">Literary &amp; Music Agent</span>
+                        </div>
+                    </footer>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- Bottom Divider: Coral-to-Parchment Gradient with Shallow Wave -->
+    <div class="home-testimonials-section__divider-wrapper" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="dividerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.8"></stop>
+                    <stop offset="100%" stop-color="var(--bg-light)" stop-opacity="1"></stop>
+                </linearGradient>
+            </defs>
+            <path d="M0,80 L0,50 Q75,45 150,52 T300,48 Q375,52 450,45 T600,50 Q675,45 750,52 T900,48 Q975,52 1050,45 T1200,50 L1200,80 Z" fill="#0F0D14"></path>
+        </svg>
+    </div>
+</section>
+
+<section data-band-index="4" class="home-cta-section" data-layout-spec="Home-cta">
+    <!-- Manuscript texture overlay -->
+    <div class="home-cta-section__manuscript-texture" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <!-- Stylized musical staff lines and notes scattered -->
+            <g opacity="0.4" stroke="var(--text-light)" stroke-width="0.5" fill="none">
+                <!-- Staff lines -->
+                <path d="M50,100 L750,100 M50,110 L750,110 M50,120 L750,120 M50,130 L750,130 M50,140 L750,140"></path>
+                <path d="M200,300 L600,300 M200,310 L600,310 M200,320 L600,320 M200,330 L600,330 M200,340 L600,340"></path>
+                <!-- Notes -->
+                <ellipse cx="120" cy="125" rx="6" ry="4" transform="rotate(-15 120 125)" fill="var(--text-light)"></ellipse>
+                <line x1="126" y1="125" x2="126" y2="95"></line>
+                <ellipse cx="300" cy="115" rx="6" ry="4" transform="rotate(-15 300 115)" fill="var(--text-light)"></ellipse>
+                <line x1="306" y1="115" x2="306" y2="85"></line>
+                <ellipse cx="500" cy="315" rx="6" ry="4" transform="rotate(-15 500 315)" fill="var(--text-light)"></ellipse>
+                <line x1="506" y1="315" x2="506" y2="285"></line>
+                <ellipse cx="250" cy="325" rx="6" ry="4" transform="rotate(-15 250 325)" fill="var(--text-light)"></ellipse>
+                <line x1="256" y1="325" x2="256" y2="295"></line>
+                <!-- Treble clef hint -->
+                <path d="M680,160 C670,160 660,140 670,120 C680,100 690,100 690,120 C690,140 670,160 680,180 C690,200 710,180 700,160"></path>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Waveform embossing decoration -->
+    <div class="home-cta-section__waveform-accent" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,100 L50,100 L65,60 L80,140 L95,80 L110,120 L125,70 L140,130 L155,90 L170,110 L185,50 L200,150 L215,70 L230,130 L245,100 L260,100 L275,80 L290,120 L305,60 L320,140 L335,90 L350,110 L365,70 L380,130 L395,100 L410,100 L425,80 L440,120 L455,60 L470,140 L485,90 L500,110 L515,70 L530,130 L545,100 L560,100 L575,80 L590,120 L605,60 L620,140 L635,90 L650,110 L665,70 L680,130 L695,100 L710,100 L725,80 L740,120 L755,60 L770,140 L785,90 L800,110 L815,70 L830,130 L845,100 L860,100 L875,80 L890,120 L905,60 L920,140 L935,90 L950,110 L965,70 L980,130 L995,100 L1010,100 L1025,80 L1040,120 L1055,60 L1070,140 L1085,90 L1100,110 L1115,70 L1130,130 L1145,100 L1160,100 L1175,80 L1190,120 L1200,100" stroke="var(--text-light)" stroke-width="1.5" fill="none" opacity="0.08"></path>
+        </svg>
+    </div>
+
+    <!-- Content Container -->
+    <div class="home-cta-section__container">
+        <h2 class="home-cta-section__heading">Let's Create Something Extraordinary Together</h2>
+        <p class="home-cta-section__description">
+            Whether you're an author, musician, agent, or producer — your story deserves to be heard. T-N-T Publishing Company bridges the worlds of literature and music, offering a collaborative home for creative professionals ready to share their work with the world.
+        </p>
+        <div class="home-cta-section__actions">
+            <a href="/contact" class="home-cta-section__btn home-cta-section__btn--primary">Start a Conversation</a>
+            <a href="/about" class="home-cta-section__btn home-cta-section__btn--ghost">
+                Discover Our Story
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-element-type="icon" data-icon-type="svg">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Coral accent line near the bottom -->
+    <div class="home-cta-section__accent-line" aria-hidden="true"></div>
+</section>
+  </main>
+  
+  <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <!-- Company Info -->
+      <div class="footer-col footer-company-col">
+        <img src="/assets/t-n-t-publishing-company-publishing-logo.webp" alt="T-N-T Publishing Company" class="logo">
+        <p class="footer-tagline">Where literature and music meet — crafting immersive editorial experiences that resonate across pages and soundwaves.</p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col footer-links-col">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/services">Services</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="footer-col footer-contact-col">
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li>
+            <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+            <span class="contact-text"><a href="mailto:[business_email]">[business_email]</a></span>
+          </li>
+          <li>
+            <span class="contact-icon"><i class="fas fa-phone"></i></span>
+            <span class="contact-text"><a href="tel:[business_phone]">[business_phone]</a></span>
+          </li>
+          <li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+            <span class="contact-text">[business_address]</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Business Hours -->
+      <div class="footer-col footer-hours-col">
+        <h4>Opening Hours</h4>
+        <ul class="footer-hours">
+          <li><a href="/"><span class="hours-day">Mon–Fri</span> <span class="hours-time">09:00–18:00</span></a></li>
+          <li><a href="/"><span class="hours-day">Sat</span> <span class="hours-time">09:00–13:00</span></a></li>
+          <li><a href="/"><span class="hours-day">Sun</span> <span class="hours-time">Closed</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Social Media -->
+      <div class="footer-col footer-social-col">
+        <h4>Follow Us</h4>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook" data-zappy-social-placeholder="true"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram" data-zappy-social-placeholder="true"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="WhatsApp" data-zappy-social-placeholder="true"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        <span>© 2026 T-N-T Publishing Company. All rights reserved.</span>
+      </div>
+      <div class="footer-legal">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms &amp; Conditions</a>
+        <a href="/accessibility">Accessibility</a>
+        <a href="https://zappy5.com" target="_blank" class="zappy-attribution">Generated by Zappy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script id="zappy-navbar-scroll-effect">
+    (function(){
+      var nb=document.querySelector('nav.navbar,.navbar:not(.zappy-catalog-menu)');
+      var cm=document.querySelector('.zappy-catalog-menu,#zappy-catalog-menu');
+      if(!nb)return;
+      var fb='rgba(246,240,232,0.85)';
+      var th=60;
+      var rs=getComputedStyle(document.documentElement);
+      var td=rs.getPropertyValue('--text-dark').trim()||'#1a1a1a';
+      var tl=rs.getPropertyValue('--text-light').trim()||'#ffffff';
+      var st=true?td:tl;
+      nb.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease,box-shadow 0.3s ease';
+      if(cm)cm.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease';
+      var neSel='a,.navbar-brand,.navbar-brand a,.dropdown-toggle,.mobile-toggle,.phone-header-btn,.mobile-hamburger-btn,.mobile-close-btn,.mobile-submenu-toggle,.nav-link';
+      var skipCls=['cart-link','login-link','nav-search-toggle','search-toggle'];
+      function sTC(c,clr){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){var sk=false;if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu')){sk=true;}for(var j=0;j<skipCls.length;j++){if(els[i].classList.contains(skipCls[j])){sk=true;break;}}if(!sk)els[i].style.setProperty('color',clr,'important');}}
+      function cTC(c){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu'))continue;els[i].style.removeProperty('color');}}
+      function applyScrolled(){
+        nb.classList.add('scrolled');
+        if(window.innerWidth>768){
+          nb.style.setProperty('--frosted-text',st);
+          nb.style.setProperty('background-image','none','important');
+          nb.style.setProperty('background-color',fb,'important');
+          nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
+          sTC(nb,st);
+        }
+        if(cm){cm.classList.add('scrolled');if(window.innerWidth>768){cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}}
+      }
+      function onS(){
+        if(window._zappyNavNoDarkHero) return;
+        if(window.innerWidth<=768){nb.classList.remove('scrolled');cTC(nb);if(cm){cm.classList.remove('scrolled');cTC(cm);}return;}
+        var y=window.scrollY||window.pageYOffset;
+        if(y>th){
+          nb.classList.add('scrolled');nb.style.setProperty('background-color',fb,'important');nb.style.setProperty('background-image','none','important');
+          nb.style.setProperty('--frosted-text',st);nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
+          sTC(nb,st);
+          if(cm){cm.classList.add('scrolled');cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}
+        }else{
+          nb.classList.remove('scrolled');nb.style.setProperty('background-color','transparent','important');nb.style.removeProperty('background-image');
+          nb.style.removeProperty('--frosted-text');nb.style.backdropFilter='none';nb.style.webkitBackdropFilter='none';nb.style.boxShadow='none';
+          cTC(nb);
+          if(cm){cm.classList.remove('scrolled');cm.style.setProperty('background','transparent','important');cm.style.setProperty('backdrop-filter','none','important');cm.style.setProperty('-webkit-backdrop-filter','none','important');cTC(cm);}
+        }
+      }
+      function sLum(rv,gv,bv){rv/=255;gv/=255;bv/=255;rv=rv<=0.03928?rv/12.92:Math.pow((rv+0.055)/1.055,2.4);gv=gv<=0.03928?gv/12.92:Math.pow((gv+0.055)/1.055,2.4);bv=bv<=0.03928?bv/12.92:Math.pow((bv+0.055)/1.055,2.4);return 0.2126*rv+0.7152*gv+0.0722*bv;}
+      window.addEventListener('scroll',onS,{passive:true});
+      window.addEventListener('resize',onS,{passive:true});
+      onS();
+      var heroEl=document.querySelector('section[class*="hero"],[data-hero-type],main:not(.courses-page-main)>section:first-child');
+      var hasDH=false;
+      if(heroEl){var hCs=getComputedStyle(heroEl);var hBI=hCs.backgroundImage;if(hBI&&hBI!=='none'){if(hBI.indexOf('url(')!==-1){var hM2=hCs.backgroundColor.match(/\d+/g);if(hM2&&hM2.length>=3){hasDH=sLum(parseInt(hM2[0]),parseInt(hM2[1]),parseInt(hM2[2]))<0.4;}else{hasDH=true;}}else if(hBI.indexOf('gradient')!==-1){var cM=hBI.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g);if(cM&&cM.length>0){var tLm=0;for(var ci=0;ci<cM.length;ci++){var pts=cM[ci].match(/\d+/g);tLm+=sLum(parseInt(pts[0]),parseInt(pts[1]),parseInt(pts[2]));}hasDH=(tLm/cM.length)<0.4;}else{hasDH=true;}}else{hasDH=true;}}else{var hM=hCs.backgroundColor.match(/\d+/g);if(hM&&hM.length>=3){hasDH=sLum(parseInt(hM[0]),parseInt(hM[1]),parseInt(hM[2]))<0.4;}}}
+      if(!hasDH){window.removeEventListener('scroll',onS);window.removeEventListener('resize',onS);applyScrolled();window._zappyNavNoDarkHero=true;}
+    })();
+    </script>
+</body>
+</html>
