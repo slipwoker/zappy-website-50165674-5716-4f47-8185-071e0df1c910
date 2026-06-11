@@ -7049,6 +7049,254 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 ._access-icon {
   display: flex !important;
 }
+
+/* Added Component Styles */
+/* ============================================
+   TNT Features Section
+   ============================================ */
+.tnt-features {
+  background: #faf9fb;
+  padding: 90px 20px;
+  font-family: system-ui, sans-serif;
+  direction: ltr;
+}
+
+.tnt-features-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Header --- */
+.tnt-features-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.tnt-features-eyebrow {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary, #2B163D);
+  background: rgba(43, 22, 61, 0.08);
+  padding: 6px 18px;
+  border-radius: 50px;
+  margin-bottom: 18px;
+}
+
+.tnt-features-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.tnt-features-subtitle {
+  font-size: 1.15rem;
+  color: #5a5a7a;
+  max-width: 620px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* --- Grid --- */
+.tnt-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-bottom: 60px;
+}
+
+/* --- Feature Card --- */
+.tnt-feature-card {
+  background: #ffffff;
+  border: 1px solid rgba(43, 22, 61, 0.1);
+  border-radius: 16px;
+  padding: 36px 28px 32px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tnt-feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--primary, #2B163D);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 0 0 4px 4px;
+}
+
+.tnt-feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(43, 22, 61, 0.12);
+  border-color: rgba(43, 22, 61, 0.25);
+}
+
+.tnt-feature-card:hover::before {
+  opacity: 1;
+}
+
+/* --- Icon --- */
+.tnt-feature-icon-wrapper {
+  margin-bottom: 22px;
+}
+
+.tnt-feature-icon {
+  width: 52px;
+  height: 52px;
+  display: block;
+}
+
+.tnt-icon-bg {
+  fill: rgba(43, 22, 61, 0.07);
+}
+
+.tnt-icon-shape {
+  stroke: var(--primary, #2B163D);
+  fill: none;
+}
+
+.tnt-feature-card:hover .tnt-icon-bg {
+  fill: rgba(43, 22, 61, 0.14);
+  transition: fill 0.3s ease;
+}
+
+.tnt-feature-card:hover .tnt-icon-shape {
+  stroke: #3d1f5c;
+  transition: stroke 0.3s ease;
+}
+
+/* --- Card Text --- */
+.tnt-feature-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+
+.tnt-feature-card-desc {
+  font-size: 0.98rem;
+  color: #5a5a7a;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* --- Showcase Image --- */
+.tnt-features-showcase {
+  margin-top: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(43, 22, 61, 0.1);
+}
+
+.tnt-features-showcase-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+}
+
+/* ============================================
+   Responsive - Tablet
+   ============================================ */
+@media (max-width: 1024px) {
+  .tnt-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .tnt-features-title {
+    font-size: 2.2rem;
+  }
+
+  .tnt-feature-card {
+    padding: 30px 22px 28px;
+  }
+}
+
+/* ============================================
+   Responsive - Mobile
+   ============================================ */
+@media (max-width: 640px) {
+  .tnt-features {
+    padding: 60px 16px;
+  }
+
+  .tnt-features-header {
+    margin-bottom: 40px;
+  }
+
+  .tnt-features-title {
+    font-size: 1.8rem;
+  }
+
+  .tnt-features-subtitle {
+    font-size: 1rem;
+  }
+
+  .tnt-features-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .tnt-feature-card {
+    padding: 26px 20px 24px;
+    border-radius: 14px;
+  }
+
+  .tnt-feature-card-title {
+    font-size: 1.15rem;
+  }
+
+  .tnt-feature-card-desc {
+    font-size: 0.93rem;
+  }
+
+  .tnt-feature-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .tnt-features-showcase {
+    border-radius: 14px;
+  }
+}
+
+/* ============================================
+   Accessibility - Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .tnt-feature-card {
+    transition: none;
+  }
+
+  .tnt-feature-card:hover {
+    transform: none;
+  }
+
+  .tnt-feature-card::before {
+    transition: none;
+  }
+}
+
+/* ============================================
+   Focus States for Keyboard Navigation
+   ============================================ */
+.tnt-feature-card:focus-visible {
+  outline: 3px solid var(--primary, #2B163D);
+  outline-offset: 3px;
+  border-radius: 16px;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
