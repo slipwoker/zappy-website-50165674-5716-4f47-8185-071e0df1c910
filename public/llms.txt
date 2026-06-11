@@ -7,33 +7,33 @@
 ## Pages
 
 ### Home
-https://t-n-t-publishing-company-50165674.zappy5.app
+https://example.com
 Where books meet beats. T-N-T Publishing Company amplifies authors and musicians with expert atv music publishing and kindle book publishing services. Start your creative explosion today.
 
 ### Services
-https://t-n-t-publishing-company-50165674.zappy5.app/services
+https://example.com/services
 From concordia music publishing to kindle book publishing, our dual-focus services bridge literature and music. Explore tailored solutions for authors, musicians, and creative pros now.
 
 ### About
-https://t-n-t-publishing-company-50165674.zappy5.app/about
+https://example.com/about
 Discover how T-N-T Publishing Company unites the literary and musical worlds. Built for storytellers and sound creators, we redefine ascap music publishing and book production.
 
 ### Contact
-https://t-n-t-publishing-company-50165674.zappy5.app/contact
+https://example.com/contact
 Ready to amplify your voice? Reach out to T-N-T Publishing Company for atv music publishing, kindle book publishing, and more. Let&#39;s bring your work to the world together.
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://t-n-t-publishing-company-50165674.zappy5.app/privacy
+https://example.com/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://t-n-t-publishing-company-50165674.zappy5.app/terms
+https://example.com/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://t-n-t-publishing-company-50165674.zappy5.app/accessibility
+https://example.com/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
@@ -43,8 +43,8 @@ Information about WCAG compliance and accessibility features.
 - (No contact details configured yet.)
 
 ### Contact form
-- URL: https://t-n-t-publishing-company-50165674.zappy5.app/contact
-- Endpoint: https://t-n-t-publishing-company-50165674.zappy5.app/api/email/contact-form
+- URL: https://example.com/contact
+- Endpoint: https://example.com/api/email/contact-form
 - Method: POST
 - Content-Type: application/json
 - Fields:
@@ -77,6 +77,6 @@ Publishing
 
 # Machine-readable feeds
 
-- Sitemap (XML): https://t-n-t-publishing-company-50165674.zappy5.app/sitemap.xml
-- Robots: https://t-n-t-publishing-company-50165674.zappy5.app/robots.txt
-- Flattened page text (for LLMs): https://t-n-t-publishing-company-50165674.zappy5.app/llms-full.txt
+- Sitemap (XML): https://example.com/sitemap.xml
+- Robots: https://example.com/robots.txt
+- Flattened page text (for LLMs): https://example.com/llms-full.txt
