@@ -40,7 +40,9 @@ Information about WCAG compliance and accessibility features.
 
 ## How to Contact Us
 
-- (No contact details configured yet.)
+- Email: tntpub.co@consultant.com
+- Phone: 13372413899
+- Phone (tel): tel:13372413899
 
 ### Contact form
 - URL: https://example.com/contact
